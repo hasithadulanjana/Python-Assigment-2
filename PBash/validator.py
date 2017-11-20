@@ -19,6 +19,9 @@ class IFileValidator(metaclass=ABCMeta):
     def check_all(self, employee_attributes):
         pass
 
+
+class IEmployeeInfo(metaclass=ABCMeta):
+
     @abstractmethod
     def check_id(self, emp_id):
         pass
@@ -52,7 +55,7 @@ class IFileValidator(metaclass=ABCMeta):
         pass
 
 
-class Validator(IFileValidator):
+class Validator(IFileValidator, IEmployeeInfo):
 
     # Tim
     def __init__(self):
@@ -110,21 +113,25 @@ class Validator(IFileValidator):
 
     # Rosemary
     def check_all(self, employee_attributes):
-        if not self.check_birthday(employee_attributes["BIRTHDAY"]):
+        emp_attr = employee_attributes
+        switch ={
+            1:"BIRTHDAY",
+        }
+        if not self.check_birthday(emp_attr["BIRTHDAY"]):
             return False
-        if not self.check_id(employee_attributes["EMPID"]):
+        if not self.check_id(emp_attr["EMPID"]):
             return False
-        if not self.check_age(employee_attributes["AGE"]):
+        if not self.check_age(emp_attr["AGE"]):
             return False
-        if not self.check_gender(employee_attributes["GENDER"]):
+        if not self.check_gender(emp_attr["GENDER"]):
             return False
-        if not self.check_sales(employee_attributes["SALES"]):
+        if not self.check_sales(emp_attr["SALES"]):
             return False
-        if not self.check_bmi(employee_attributes["BMI"]):
+        if not self.check_bmi(emp_attr["BMI"]):
             return False
-        if not self.check_salary(employee_attributes["SALARY"]):
+        if not self.check_salary(emp_attr["SALARY"]):
             return False
-        if not self.check_birthday_against_age(employee_attributes["BIRTHDAY"], employee_attributes["AGE"]):
+        if not self.check_birthday_against_age(emp_attr["BIRTHDAY"], emp_attr["AGE"]):
             return False
         return True
 

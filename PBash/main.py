@@ -1,4 +1,4 @@
-from command import Command
+from command import CommandHelp
 from file_handler import FileHandler
 from validator import Validator
 from view import View
@@ -17,5 +17,5 @@ except FileNotFoundError:
     database = DatabaseHandler(Validator(), database_name)
     database.load()
     pickle.dump(database, open(database_name+".p", "wb"))
-cli = Command(FileHandler(Validator()), database, View())
+cli = CommandHelp(FileHandler(Validator()), database, View())
 cli.cmdloop()

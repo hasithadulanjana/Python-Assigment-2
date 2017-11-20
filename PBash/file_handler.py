@@ -4,11 +4,71 @@ import csv
 import re
 import openpyxl
 from validator import Validator
+from abc import ABCMeta, abstractmethod
 
 
-class FileHandler:
+class AbstractFactoryClass(metaclass=ABCMeta):
+            @abstractmethod
+            def create_file_handle(self):
+                pass
+
+            @abstractmethod
+            def create_file_handle(self):
+                pass
+
+
+class FileHandler(AbstractFactoryClass):
     def __init__(self, new_validator):
         self.validator = new_validator
+
+def open(self, file_path):
+            if re.search(r'\.csv$', file_path):
+                return self.csv_dict_reader(file_path)
+            elif re.search(r'\.txt$', file_path):
+                return self.txt_dict_reader(file_path)
+            elif re.search(r'\.xlsx$', file_path):
+                result = self.excel_reader(file_path)
+                if result and self.validator.check_data_set(result):
+                    return result
+                else:
+                    print("There were no valid entries in the file", file=sys.stderr)
+                    return False
+            else:
+                print('Invalid file extension', file=sys.stderr)
+                return False
+
+    def open(self, file_path):
+        pass
+
+class txt_reader(FileHandler):
+    try:
+        file = open(filename, "r")
+    except FileNotFoundError:
+        print('The file was not found', file=sys.stderr)
+        return False
+    the_list = []
+    for line in file:
+        dictionary = {}
+        entries = line.split(";")
+        for entry in entries:
+            if len(entry.split("=")) == 2:
+                key = entry.split("=")[0]
+                value = entry.split("=")[1]
+                value = value.rstrip('\n')
+                dictionary[key] = value
+            else:
+                print('The file was in an invalid format', file=sys.stderr)
+                return False
+        if self.validator.check_line(dictionary):
+            the_list.append(dictionary)
+        else:
+            print('Entry failed validation', file=sys.stderr)
+    if self.validator.check_data_set(the_list):
+        return the_list
+    else:
+        print("There were no valid entries in the file", file=sys.stderr)
+        return False
+
 
     def open(self, file_path):
         if re.search(r'\.csv$', file_path):
@@ -27,33 +87,7 @@ class FileHandler:
             return False
 
     def txt_dict_reader(self, filename):
-        try:
-            file = open(filename, "r")
-        except FileNotFoundError:
-            print('The file was not found', file=sys.stderr)
-            return False
-        the_list = []
-        for line in file:
-            dictionary = {}
-            entries = line.split(";")
-            for entry in entries:
-                if len(entry.split("=")) == 2:
-                    key = entry.split("=")[0]
-                    value = entry.split("=")[1]
-                    value = value.rstrip('\n')
-                    dictionary[key] = value
-                else:
-                    print('The file was in an invalid format', file=sys.stderr)
-                    return False
-            if self.validator.check_line(dictionary):
-                the_list.append(dictionary)
-            else:
-                print('Entry failed validation', file=sys.stderr)
-        if self.validator.check_data_set(the_list):
-            return the_list
-        else:
-            print("There were no valid entries in the file", file=sys.stderr)
-            return False
+
 
     # hasitha
     def csv_dict_reader(self, filename):
