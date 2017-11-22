@@ -18,7 +18,7 @@ class CommandHelp(cmd.Cmd):
     # Rosemary
     def help_quit(self):
         if self.print_message:
-            return print("Could not find entry in help file")
+            return  print("Could not find entry in help file")
 
     # Tim
     def do_open(self, arg):
@@ -47,17 +47,14 @@ class CommandHelp(cmd.Cmd):
             return print("Could not find entry in help file")
 
 
-class CommandBar(cmd.Cmd):
     # Tim
     def do_bar(self, arg):
         arg = arg.upper()
         if arg in ("SALES", "SALARY", "AGE"):
             if self.db.get_data(arg):
                 self.view.plot_bar(self.db.get_data(arg))
-            else:
-                print("Couldn't find valid data")
-        else:
-            print('The valid options for a bar graph are sales, salary or age')
+            return print("Couldn't find valid data")
+        return print('The valid options for a bar graph are sales, salary or age')
 
     # Tim
     def do_get(self, arg):
@@ -68,10 +65,8 @@ class CommandBar(cmd.Cmd):
         result = self.file_handler.open_help("get")
         if result == "No such command.":
             print("Could not find entry in help file")
-        else:
-            print(result)
+        return print(result)
 
-class CommandPie(cmd.Cmd):
     # Tim
     def do_pie(self, arg):
         arg = arg.upper()
@@ -86,11 +81,8 @@ class CommandPie(cmd.Cmd):
         result = self.file_handler.open_help("pie")
         if result == "No such command.":
             return print("Could not find entry in help file")
-        else:
-            print(result)
+        return print(result)
 
-
-class CommandLine(cmd.Cmd):
     # Hasitha
     def get_data(self,sales, ages):
         return sales == self.db.get_data("SALES")and ages == self.db.get_data("AGE")
@@ -105,8 +97,7 @@ class CommandLine(cmd.Cmd):
         result = self.file_handler.open_help("line")
         if result == "No such command.":
             print("Could not find entry in help file")
-        else:
-            print(result)
+        return print(result)
 
     # Rosemary
     def do_linegraph(self, arg):
@@ -120,30 +111,26 @@ class CommandLine(cmd.Cmd):
         result = self.file_handler.open_help("linegraph")
         if result == "No such command.":
             print("Could not find entry in help file")
-        else:
-            print(result)
+        return print(result)
 
-class CommandScatter(cmd.Cmd):
-    # Tim
     def do_scatter(self, arg):
+        result = "'The valid options for a scatter graph are salary or sales'"
         arg = arg.upper()
         if arg == "SALARY":
             salary = self.db.get_data("SALARY")
             age = self.db.get_data("AGE")
             self.view.age_salary(age, salary)
-        elif arg == "SALES":
+        if arg == "SALES":
             sales = self.db.get_data("SALES")
             age = self.db.get_data("AGE")
             self.view.pygal_line_salebased(sales, age)
-        else:
-            print('The valid options for a scatter graph are salary or sales')
+        return print(result)
 
     #Rosemary
     def help_scatter(self):
         result = self.file_handler.open_help("scatter")
         if result == "No such command.":
             print("Could not find entry in help file")
-        else:
-            print(result)
+        return print(result)
 
 
